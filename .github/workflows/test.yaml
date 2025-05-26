@@ -10,6 +10,7 @@ env:
     "PARTITION_KEY": ${{secrets.PARTITION_KEY}}
     "ATTRIBUTE": ${{secrets.ATTRIBUTE}}
 
+
 jobs:
     lamda-test-job:
         runs-on: ubuntu-latest
@@ -22,6 +23,13 @@ jobs:
               uses: actions/setup-python@v5
               with:
                 python-version: '3.9'
+
+            - name: "Configure AWS Creds"
+              uses: aws-actions/configure-aws-credentials@v4.1.0
+              with:
+                aws-region: ${{ secrets.AWS_REGION }}
+                role-to-assume: ${{ secrets.IAM_ARN }}
+                role-session-name: samplerolesession
             
             - name: "Install requirements"
               working-directory: 
