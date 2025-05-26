@@ -5,6 +5,11 @@ on:
       branches: [testing]
 env:
     "API_URL": ${{ secrets.API_URL }}
+    "TABLE_NAME": ${{ secrets.TABLE_NAME }}
+    "ITEM_NAME": ${{ secrets.ITEM_NAME }}
+    "PARTITION_KEY": ${{secrets.PARTITION_KEY}}
+    "ATTRIBUTE": ${{secrets.ATTRIBUTE}}
+
 jobs:
     lamda-test-job:
         runs-on: ubuntu-latest
@@ -24,3 +29,9 @@ jobs:
 
             - name: "Run COR Test"
               run: pytest pytest/test_cors.py
+
+            - name: "Run DB Test"
+              run: pytest pytest/test_database_value.py
+
+            - name: "Run Input Test"
+              run: pytest pytest/test_input.py
