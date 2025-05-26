@@ -10,6 +10,9 @@ env:
     "PARTITION_KEY": ${{secrets.PARTITION_KEY}}
     "ATTRIBUTE": ${{secrets.ATTRIBUTE}}
 
+permissions: 
+  id-token: write
+  contents: read
 
 jobs:
     lamda-test-job:
