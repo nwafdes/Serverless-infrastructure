@@ -46,3 +46,21 @@ jobs:
 
             - name: "Run Input Test"
               run: pytest pytest/test_input.py
+
+
+    deploy-terraform:
+      runs-on: ubuntu-latest
+      environment: testing
+      needs: [lamda-test-job]
+      steps:
+        - name: "Terraform init"
+          working-directory: Backend
+          run: terraform init
+          
+        - name: "Terraform plan"
+          working-directory: Backend
+          run: terraform plan
+        
+        - name: "Terraform apply"
+          working-directory: Backend
+          run: terraform apply
