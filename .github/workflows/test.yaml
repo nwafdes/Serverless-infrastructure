@@ -53,6 +53,22 @@ jobs:
       environment: testing
       needs: [lamda-test-job]
       steps:
+
+        - name: "Checkout repo"
+          uses: actions/checkout@v3
+
+        - name: "Configure AWS Creds"
+          uses: aws-actions/configure-aws-credentials@v4.1.0
+          with:
+            aws-region: ${{ secrets.AWS_REGION }}
+            role-to-assume: ${{ secrets.IAM_ARN }}
+            role-session-name: samplerolesession
+        
+        - name: Set up Terraform
+          uses: hashicorp/setup-terraform@v1
+          with:
+            terraform_version: '1.4.0'
+
         - name: "Terraform init"
           working-directory: Backend
           run: terraform init
