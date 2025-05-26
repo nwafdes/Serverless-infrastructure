@@ -1,0 +1,26 @@
+name: "Test-Lambda"
+
+on: 
+    workflow_dispatch: 
+
+env:
+    "API_URL": ${{ secrets.API_URL }}
+jobs:
+    lamda-test-job:
+        runs-on: ubuntu-latest
+        # environment: testing
+        steps:
+            - name: "Checkout repo"
+              uses: actions/checkout@v3
+            
+            - name: "Setup Python"
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.9'
+            
+            - name: "Install requirements"
+              working-directory: 
+              run: pip install -r pytest/requirements.txt
+
+            - name: "Run COR Test"
+              run: pytest test_cors.py

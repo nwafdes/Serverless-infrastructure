@@ -152,12 +152,12 @@ output "API_Invoke_URL" {
 resource "aws_lambda_function" "test_lambda" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
-  filename      = "../../back_end/lambda_function_payload.zip"
+  filename      = "../lambda/lambda_function_payload.zip"
   function_name = var.Lambda_function_Name
   role          = aws_iam_role.Lambda_Update_DDB_Role.arn
   handler       = "lambda_function.lambda_handler"
 
-  source_code_hash = filebase64sha256("../../back_end/lambda_function_payload.zip")
+  source_code_hash = filebase64sha256("../lambda/lambda_function_payload.zip")
 
   runtime = "python3.9"
 
