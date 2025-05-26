@@ -6,3 +6,4 @@ terraform.tfstate
 terraform-provider-aws_v3.76.1_x5.exe
 .venv
 .env
+pytest
