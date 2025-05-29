@@ -89,7 +89,7 @@ def lambda_handler(event, context):
                     'statusCode': 400,
                     'body': json.dumps({"error": "Invalid JSON in request body"})
             }
-#sdflkjsdfl;ksjvl;kasjdflkajsdflkjasfdlkjasdflkasjdfl'kasjdf;laskdjf
+
             try:
                 # Update DynamoDB
                 ddb.update_item(
@@ -135,3 +135,6 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps({"Error": "WE are Facing an error!!"})
         }
+    
+
+# This is a lambda test
