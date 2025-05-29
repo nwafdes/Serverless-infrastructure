@@ -40,19 +40,25 @@ jobs:
             - name: "Apply plan"
               working-directory: Backend
               run: terraform plan
+
+            - name: "Apply apply"
+              working-directory: Backend
+              run: terraform apply --auto-approve
             
 
-    # lamda-test-job:
-    #   runs-on: ubuntu-latest
-    #   environment: testing
-    #     - name: "Setup Python"
-    #       uses: actions/setup-python@v5
-    #       with:
-    #         python-version: '3.9'
+    lamda-test-job:
+      runs-on: ubuntu-latest
+      environment: testing
+      needs: [prepare-creds]
+      steps:
+        - name: "Setup Python"
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.9'
         
-    #     - name: "Install requirements"
-    #       working-directory: 
-    #       run: pip install -r pytest/requirements.txt
+        - name: "Install requirements"
+          working-directory: pytest
+          run: pip install -r requirements.txt
 
-    #     - name: "Run COR Test"
-    #       run: pytest test_cors.py
+        - name: "Run COR Test"
+          run: pytest test_cors.py
