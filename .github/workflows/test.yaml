@@ -4,6 +4,9 @@ on:
   push:
     branches: [testing]
 
+permissions: 
+  id-token: write
+  contents: read
 env:
     "API_URL": ${{ secrets.API_URL }}
 jobs:
