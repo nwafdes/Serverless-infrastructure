@@ -9,6 +9,11 @@ permissions:
   contents: read
 env:
     "API_URL": ${{ secrets.API_URL }}
+    "TABLE_NAME": ${{ secrets.TABLE_NAME }}
+    "PARTITION_KEY": ${{ secrets.PARTITION_KEY }}
+    "ITEM_NAME": ${{ secrets.ITEM_NAME }}
+    "ATTRIBUTE": ${{ secrets.ATTRIBUTE }}
+
 jobs:
     prepare-creds:
         runs-on: ubuntu-latest
@@ -65,4 +70,14 @@ jobs:
           run: pip install -r requirements.txt
 
         - name: "Run COR Test"
+          working-directory: pytest
           run: pytest test_cors.py
+
+        
+        - name: "Run database Test"
+          working-directory: pytest
+          run: pytest test_database_value.py
+
+        - name: "Run database Test"
+          working-directory: pytest
+          run: pytest test_input.py
