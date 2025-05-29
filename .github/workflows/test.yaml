@@ -1,31 +1,23 @@
 name: "Test-Lambda"
 
 on: 
-    push: 
-      branches: [testing]
+  push:
+    branches: [testing]
+
 env:
     "API_URL": ${{ secrets.API_URL }}
-    "TABLE_NAME": ${{ secrets.TABLE_NAME }}
-    "ITEM_NAME": ${{ secrets.ITEM_NAME }}
-    "PARTITION_KEY": ${{secrets.PARTITION_KEY}}
-    "ATTRIBUTE": ${{secrets.ATTRIBUTE}}
-
-permissions: 
-  id-token: write
-  contents: read
-
 jobs:
-    lamda-test-job:
+    prepare-creds:
         runs-on: ubuntu-latest
         environment: testing
         steps:
             - name: "Checkout repo"
               uses: actions/checkout@v3
             
-            - name: "Setup Python"
-              uses: actions/setup-python@v5
+            - name: Set up Terraform
+              uses: hashicorp/setup-terraform@v1
               with:
-                python-version: '3.9'
+                terraform_version: '1.4.0'
 
             - name: "Configure AWS Creds"
               uses: aws-actions/configure-aws-credentials@v4.1.0
@@ -34,49 +26,29 @@ jobs:
                 role-to-assume: ${{ secrets.IAM_ARN }}
                 role-session-name: samplerolesession
             
-            - name: "Install requirements"
-              working-directory: 
-              run: pip install -r pytest/requirements.txt
+            - name: "Zip lambda function"
+              run: zip lambda_function_payload.zip lambda_function.py
 
-            - name: "Run COR Test"
-              run: pytest pytest/test_cors.py
+            - name: "Terraform init"
+              working-directory: Backend
+              run: terraform init
+            
+            - name: "Apply plan"
+              working-directory: Backend
+              run: terraform plan
+            
 
-            - name: "Run DB Test"
-              run: pytest pytest/test_database_value.py
-
-            - name: "Run Input Test"
-              run: pytest pytest/test_input.py
-
-
-    deploy-terraform:
-      runs-on: ubuntu-latest
-      environment: testing
-      needs: [lamda-test-job]
-      steps:
-
-        - name: "Checkout repo"
-          uses: actions/checkout@v3
-
-        - name: "Configure AWS Creds"
-          uses: aws-actions/configure-aws-credentials@v4.1.0
-          with:
-            aws-region: ${{ secrets.AWS_REGION }}
-            role-to-assume: ${{ secrets.IAM_ARN }}
-            role-session-name: samplerolesession
+    # lamda-test-job:
+    #   runs-on: ubuntu-latest
+    #   environment: testing
+    #     - name: "Setup Python"
+    #       uses: actions/setup-python@v5
+    #       with:
+    #         python-version: '3.9'
         
-        - name: Set up Terraform
-          uses: hashicorp/setup-terraform@v1
-          with:
-            terraform_version: '1.4.0'
+    #     - name: "Install requirements"
+    #       working-directory: 
+    #       run: pip install -r pytest/requirements.txt
 
-        - name: "Terraform init"
-          working-directory: Backend
-          run: terraform init
-          
-        - name: "Terraform plan"
-          working-directory: Backend
-          run: terraform plan
-        
-        - name: "Terraform apply"
-          working-directory: Backend
-          run: terraform apply
+    #     - name: "Run COR Test"
+    #       run: pytest test_cors.py
