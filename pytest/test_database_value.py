@@ -13,11 +13,25 @@ class MissingEnvironmentVariable(Exception):
 Make sure your API not only returns an 
 updated value to you, but actually updates the database
 """
+
 load_dotenv()
 # Upload URL from .env file
-variable="POST_PATH"
-update_url = os.getenv(variable, "No API URL found")
-if(update_url=="No API URL found"):
+variable="API_URL"
+url = os.getenv(variable, "No API URL found")
+
+# declare table_name
+tableName=os.getenv("TABLE_NAME", "No Table Name Found")
+
+# declare partition key
+pKey = os.getenv("PARTITION_KEY", "No partition key found")
+
+# Item 
+Item = os.getenv("ITEM_NAME", "No Item Found")
+
+# attribute
+attr = os.getenv("ATTRIBUTE", "No Attr found")
+
+if(url=="No API URL found"):
     raise  MissingEnvironmentVariable(f"{variable} does not exist")
 
 
@@ -26,8 +40,8 @@ def get_visitorCount_FromDB():
     my_config = Config(region_name="us-east-1")
 
     ddb = boto3.client('dynamodb',config=my_config)
-    table_name = "Website_visitors"
-    key = {"id": {"S": "Limitless"}}
+    table_name = tableName
+    key = {pKey: {"S": Item}}
     try:
         item = ddb.get_item(Key=key, TableName=table_name)
         # check if keys are exist
@@ -35,9 +49,9 @@ def get_visitorCount_FromDB():
         if not record:
             raise KeyError("Item is not a record in the DB")
         # check if price is exist
-        price_attr = record.get('price')
+        price_attr = record.get(attr)
         if not price_attr:
-            raise KeyError("Price Attribute doesn't exist")
+            raise KeyError(f"{attr} Attribute doesn't exist")
         
         # if all good store result to visitor_count
         visitor_count = price_attr['N']
@@ -49,12 +63,13 @@ def get_visitorCount_FromDB():
         
     return visitor_count
 
+
 # function to get the visitor count from the api 
 def get_updateVisitorCount_From_Post():
 
     try:
         
-        response = requests.post(url=update_url)
+        response = requests.post(url=url)
 
         if(response.status_code!=200):
             raise Exception(f"Request failed with status code {response.status_code}: {response.text}")
@@ -62,14 +77,13 @@ def get_updateVisitorCount_From_Post():
         # response is not a dict so i cant do response.get(blah), so lets change it to dict
         data = response.json()
 
-        updated_visitor_count = data.get('Visitor_Count', '')
+        updated_visitor_count = data.get("Visitor_Count", '')
 
         return updated_visitor_count
 
     except ConnectionAbortedError as cn:
         print("Connection Error")
         raise cn
-
 
 
 

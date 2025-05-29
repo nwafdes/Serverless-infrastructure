@@ -7,15 +7,10 @@ class MissingEnvironmentVariable(Exception):
     pass
 
 load_dotenv() ## This loads variables from .env into os.environ
-post_variable="POST_PATH"
-post_url = os.getenv(post_variable, "No API URL found")
-if(post_url == "No API URL found"):
+post_variable="API_URL"
+url = os.getenv(post_variable, "No API URL found")
+if(url == "No API URL found"):
     raise  MissingEnvironmentVariable(f"{post_variable} does not exist")
-
-get_variable="GET_PATH"
-get_url=os.getenv(get_variable, "No API URL found")
-if(get_url == "No API URL found"):
-    raise  MissingEnvironmentVariable(f"{get_variable} does not exist")
 
 """
 Make sure your API responds to
@@ -28,29 +23,28 @@ right way?
 # test all methods agains the urls
 def test_urls():
     methods = ['post','get','put','delete']
-    urls = {"GET":get_url,"POST":post_url}
-    for url in urls.keys():
-        # loop through GET, Then POST
-        for method in methods:
-            
-            request_func = getattr(requests, method, None)
 
-            try:
-                # make a request to the value of GET/POST which is the url
-                if url.lower() == 'post':
-                    response = request_func(urls[url], data={'key': 'value'})
-                else:
-                    response = request_func(urls[url])
-            except requests.exceptions.ConnectionError as r:
-                raise r
-            
-            # from the response GET should be 200 and the rest should be 400 (which i costumized in my API GW)
-            # if the url key = method (I.E get = get) it should return 200
-            if(method == url.lower()):
-                assert response.status_code == 200
-            
+    # loop through GET, Then POST
+    for method in methods:
+        
+        request_func = getattr(requests, method, None)
+
+        try:
+            # make a request to the value of GET/POST which is the url
+            if method == 'post':
+                response = request_func(url, data={'key': 'value'})
             else:
-                assert response.status_code == 400
+                response = request_func(url)
+        except requests.exceptions.ConnectionError as r:
+            raise r
+        
+        # from the response GET should be 200 and the rest should be 400 (which i costumized in my API GW)
+        # if the url key = method (I.E get = get) it should return 200
+        if(method in ['get','post']):
+            assert response.status_code == 200
+        
+        else:
+            assert response.status_code != 200
 
 # if used the wrong method
 """

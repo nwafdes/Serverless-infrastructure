@@ -4,4 +4,10 @@ terraform.tfstate
 terraform.tfstate.backup
 terraform.tfstate
 terraform-provider-aws_v3.76.1_x5.exe
+<<<<<<< HEAD
 bootstrap.tf
+=======
+.venv
+.env
+pytest
+>>>>>>> d88fd51c8c548fba4642c371ace737aa870ae09d
