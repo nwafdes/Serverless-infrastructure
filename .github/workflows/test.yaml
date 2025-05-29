@@ -30,6 +30,7 @@ jobs:
                 role-session-name: samplerolesession
             
             - name: "Zip lambda function"
+              working-directory: lambda
               run: zip lambda_function_payload.zip lambda_function.py
 
             - name: "Terraform init"
