@@ -84,44 +84,34 @@ jobs:
       environment: testing # Note
       if: github.ref == 'refs/heads/main'
       steps:
-      #     - name: "Checkout repo"
-      #       uses: actions/checkout@v3
+          - name: "Checkout repo"
+            uses: actions/checkout@v3
           
-      #     - name: Set up Terraform
-      #       uses: hashicorp/setup-terraform@v1
-      #       with:
-      #         terraform_version: '1.4.0'
+          - name: Set up Terraform
+            uses: hashicorp/setup-terraform@v1
+            with:
+              terraform_version: '1.4.0'
 
-      #     - name: "Configure AWS Creds"
-      #       uses: aws-actions/configure-aws-credentials@v4.1.0
-      #       with:
-      #         aws-region: ${{ secrets.AWS_REGION }}
-      #         role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
-      #         role-session-name: samplerolesession
+          - name: "Configure AWS Creds"
+            uses: aws-actions/configure-aws-credentials@v4.1.0
+            with:
+              aws-region: ${{ secrets.AWS_REGION }}
+              role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
+              role-session-name: samplerolesession
           
-      #     - name: "Zip lambda function"
-      #       working-directory: lambda
-      #       run: zip lambda_function_payload.zip lambda_function.py
+          - name: "Zip lambda function"
+            working-directory: lambda
+            run: zip lambda_function_payload.zip lambda_function.py
 
-      #     - name: "Terraform init"
-      #       working-directory: Backend
-      #       run: terraform init
+          - name: "Terraform init"
+            working-directory: Backend
+            run: terraform init
           
-      #     - name: "Apply plan"
-      #       working-directory: Backend
-      #       run: terraform plan
+          - name: "Apply plan"
+            working-directory: Backend
+            run: terraform plan
 
-      #     - name: "Apply apply"
-      #       working-directory: Backend
-      #       run: terraform apply --auto-approve
-      - name: Get OIDC token
-        id: get_token
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const token = await core.getIDToken();
-            core.setOutput("token", token);
+          - name: "Apply apply"
+            working-directory: Backend
+            run: terraform apply --auto-approve
 
-      - name: Decode OIDC token claims
-        run: |
-          echo "${{ steps.get_token.outputs.token }}" | jq -R 'split(".") | .[1] | @base64d | fromjson'
