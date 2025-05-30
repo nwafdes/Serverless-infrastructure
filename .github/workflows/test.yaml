@@ -49,35 +49,25 @@ jobs:
             - name: "Apply apply"
               working-directory: Backend
               run: terraform apply --auto-approve
+              
+            - name: "Setup Python"
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.9'
+
+            - name: "Install requirements"
+              working-directory: pytest
+              run: pip install -r requirements.txt
+
+            - name: "Run COR Test"
+              working-directory: pytest
+              run: pytest test_cors.py
+
             
+            - name: "Run database Test"
+              working-directory: pytest
+              run: pytest test_database_value.py
 
-    lamda-test-job:
-      runs-on: ubuntu-latest
-      environment: testing
-      needs: [prepare-creds]
-      steps:
-
-        - name: "Checkout repo"
-          uses: actions/checkout@v3
-        
-        - name: "Setup Python"
-          uses: actions/setup-python@v5
-          with:
-            python-version: '3.9'
-        
-        - name: "Install requirements"
-          working-directory: pytest
-          run: pip install -r requirements.txt
-
-        - name: "Run COR Test"
-          working-directory: pytest
-          run: pytest test_cors.py
-
-        
-        - name: "Run database Test"
-          working-directory: pytest
-          run: pytest test_database_value.py
-
-        - name: "Run database Test"
-          working-directory: pytest
-          run: pytest test_input.py
+            - name: "Run database Test"
+              working-directory: pytest
+              run: pytest test_input.py
