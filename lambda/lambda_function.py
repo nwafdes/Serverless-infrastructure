@@ -137,4 +137,4 @@ def lambda_handler(event, context):
         }
     
 
-# Second test in lambda function brother lets goooooo.
+# قل لعابدي الذين آمنو يقيمو الصلاو وينفقو مما رزقناهم سرا وعلانية من قبل ان يأتي يوم لا بيع فيه ولا خلال
