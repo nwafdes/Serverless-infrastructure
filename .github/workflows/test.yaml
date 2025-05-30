@@ -109,7 +109,7 @@ jobs:
             with:
               aws-region: ${{ secrets.AWS_REGION }}
               role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
-              role-session-name: samplerolesession
+              role-session-name: role2
           
           - name: "Zip lambda function"
             working-directory: lambda
