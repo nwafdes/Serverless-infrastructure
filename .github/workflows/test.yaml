@@ -2,7 +2,7 @@ name: "Test-Lambda"
 
 on: 
   push:
-    branches: [testing]
+    branches: [testing, main]
   pull_request:
     branches: [main]
 
