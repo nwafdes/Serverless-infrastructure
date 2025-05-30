@@ -6,7 +6,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket         = "sahaba-cloudresume-challenge-tfstate" # I don't want to change this back and forth
-    key            = "state-files/serverless-infra/terraform.tfstate"
+    key            = "/03-basics/backend-bootstrap/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "sahaba-terraform-state-locking"
     encrypt        = true
