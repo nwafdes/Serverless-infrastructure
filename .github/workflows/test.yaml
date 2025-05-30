@@ -92,6 +92,18 @@ jobs:
             with:
               terraform_version: '1.4.0'
 
+          - name: Get OIDC token
+            id: get_token
+            uses: actions/github-script@v6
+            with:
+              script: |
+                const token = await core.getIDToken();
+                core.setOutput("token", token);
+
+          - name: Decode OIDC token claims
+            run: |
+              echo "${{ steps.get_token.outputs.token }}" | jq -R 'split(".") | .[1] | @base64d | fromjson'
+
           - name: "Configure AWS Creds"
             uses: aws-actions/configure-aws-credentials@v4.1.0
             with:
