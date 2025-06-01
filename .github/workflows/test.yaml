@@ -2,9 +2,9 @@ name: "Test-Lambda"
 
 on: 
   push:
-    branches: [testing, main]
-  pull_request:
     branches: [main]
+  # pull_request:
+  #   branches: [main]
 
 permissions: 
   id-token: write
@@ -19,7 +19,6 @@ env:
 jobs:
   testing:
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/testing'
       environment: testing
       steps:
           - name: "Checkout repo"
@@ -34,52 +33,28 @@ jobs:
             uses: aws-actions/configure-aws-credentials@v4.1.0
             with:
               aws-region: ${{ secrets.AWS_REGION }}
-              role-to-assume: ${{ secrets.IAM_ARN }}
+              role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
               role-session-name: samplerolesession
-          
-          - name: "Zip lambda function"
-            working-directory: lambda
-            run: zip lambda_function_payload.zip lambda_function.py
-
-          - name: "Terraform init"
-            working-directory: Backend
-            run: terraform init
-          
-          - name: "Apply plan"
-            working-directory: Backend
-            run: terraform plan
-
-          - name: "Apply apply"
-            working-directory: Backend
-            run: terraform apply --auto-approve
             
           - name: "Setup Python"
             uses: actions/setup-python@v5
             with:
               python-version: '3.9'
-          
+          - name: "Get URL from Terraform"
+            run: echo "API_URL=$(terraform output -raw invoke_url)" >> $GITHUB_ENV
+            
           - name: "Install requirements"
             working-directory: pytest
             run: pip install -r requirements.txt
 
-          - name: "Run COR Test"
+          - name: "run pytest"
             working-directory: pytest
-            if: github.ref == 'refs/heads/testing'
-            run: pytest test_cors.py
+            run: pytest
 
-        
-          - name: "Run database Test"
-            working-directory: pytest
-            if: github.ref == 'refs/heads/testing'
-            run: pytest test_database_value.py
-
-          - name: "Run database Test"
-            working-directory: pytest
-            if: github.ref == 'refs/heads/testing'
-            run: pytest test_input.py
+          
 
 
-  prod:
+  deploying:
       runs-on: ubuntu-latest
       if: github.ref == 'refs/heads/main'
       steps:
@@ -90,18 +65,6 @@ jobs:
             uses: hashicorp/setup-terraform@v1
             with:
               terraform_version: '1.4.0'
-
-          - name: Get OIDC token
-            id: get_token
-            uses: actions/github-script@v6
-            with:
-              script: |
-                const token = await core.getIDToken();
-                core.setOutput("token", token);
-
-          - name: Decode OIDC token claims
-            run: |
-              echo "${{ steps.get_token.outputs.token }}" | jq -R 'split(".") | .[1] | @base64d | fromjson'
 
           - name: "Configure AWS Creds"
             uses: aws-actions/configure-aws-credentials@v4.1.0
