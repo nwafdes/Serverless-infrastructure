@@ -28,13 +28,6 @@ jobs:
             uses: hashicorp/setup-terraform@v1
             with:
               terraform_version: '1.4.0'
-
-          - name: "Configure AWS Creds"
-            uses: aws-actions/configure-aws-credentials@v4.1.0
-            with:
-              aws-region: ${{ secrets.AWS_REGION }}
-              role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
-              role-session-name: samplerolesession
             
           - name: "Setup Python"
             uses: actions/setup-python@v5
@@ -56,7 +49,7 @@ jobs:
 
   deploying:
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/main'
+      needs: testing
       steps:
           - name: "Checkout repo"
             uses: actions/checkout@v3
@@ -74,7 +67,7 @@ jobs:
               role-session-name: role2
           
           - name: "Zip lambda function"
-            working-directory: lambda
+            working-directory: pytest/app
             run: zip lambda_function_payload.zip lambda_function.py
 
           - name: "Terraform init"
