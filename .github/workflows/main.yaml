@@ -46,7 +46,7 @@ jobs:
 
           - name: "run pytest"
             working-directory: pytestt/tests
-            run: PYTHONPATH=.. pytest
+            run: pytest test_integration.py
 
           
 
