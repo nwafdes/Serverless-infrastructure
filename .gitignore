@@ -10,4 +10,4 @@ bootstrap.tf
 .venv
 .env
 >>>>>>> d88fd51c8c548fba4642c371ace737aa870ae09d
-.\pytestt\old
+old
