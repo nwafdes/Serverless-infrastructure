@@ -45,7 +45,7 @@ jobs:
             run: pip install -r requirements.txt
 
           - name: "run pytest"
-            working-directory: pytest/tests
+            working-directory: pytestt/tests
             run: PYTHONPATH=.. pytest
 
           
