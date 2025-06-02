@@ -32,7 +32,9 @@ jobs:
             with:
               python-version: '3.9'
           - name: "Get URL from Terraform"
-            run: echo "API_URL=$(terraform output -raw invoke_url)" >> $GITHUB_ENV
+            run: |
+              terraform output -raw invoke_url
+              echo "API_URL=$(terraform output -raw invoke_url)" >> $GITHUB_ENV
             
           - name: "Install requirements"
             working-directory: pytest
