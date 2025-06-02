@@ -41,7 +41,7 @@ jobs:
               role-session-name: role2
             
           - name: "Install requirements"
-            working-directory: pytest
+            working-directory: pytestt
             run: pip install -r requirements.txt
 
           - name: "run pytest"
