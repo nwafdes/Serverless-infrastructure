@@ -1,4 +1,4 @@
-name: "Test-Lambda"
+name: "INitialize Tf"
 
 on: 
   workflow_dispatch: 
