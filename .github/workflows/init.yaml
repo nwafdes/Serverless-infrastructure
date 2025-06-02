@@ -1,4 +1,4 @@
-name: "INitialize Tf"
+name: "Test-Lambda"
 
 on: 
   workflow_dispatch: 
@@ -15,36 +15,38 @@ env:
     "ATTRIBUTE": ${{ secrets.ATTRIBUTE }}
 
 jobs:
-  deploying:
-      runs-on: ubuntu-latest
-      steps:
-          - name: "Checkout repo"
-            uses: actions/checkout@v3
-          
-          - name: Set up Terraform
-            uses: hashicorp/setup-terraform@v1
-            with:
-              terraform_version: '1.4.0'
 
-          - name: "Configure AWS Creds"
-            uses: aws-actions/configure-aws-credentials@v4.1.0
-            with:
-              aws-region: ${{ secrets.AWS_REGION }}
-              role-to-assume: ${{ secrets.OIDC }}
-              role-session-name: role2
+  # deploying:
+  #     runs-on: ubuntu-latest
+  #     needs: testing
+  #     steps:
+  #         - name: "Checkout repo"
+  #           uses: actions/checkout@v3
           
-          - name: "Zip lambda function"
-            working-directory: pytestt/app
-            run: zip lambda_function_payload.zip lambda_function.py
+  #         - name: Set up Terraform
+  #           uses: hashicorp/setup-terraform@v1
+  #           with:
+  #             terraform_version: '1.4.0'
 
-          - name: "Terraform init"
-            working-directory: Backend
-            run: terraform init
+  #         - name: "Configure AWS Creds"
+  #           uses: aws-actions/configure-aws-credentials@v4.1.0
+  #           with:
+  #             aws-region: ${{ secrets.AWS_REGION }}
+  #             role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
+  #             role-session-name: role2
           
-          - name: "Apply plan"
-            working-directory: Backend
-            run: terraform plan
+  #         - name: "Zip lambda function"
+  #           working-directory: pytest/app
+  #           run: zip lambda_function_payload.zip lambda_function.py
 
-          - name: "Apply apply"
-            working-directory: Backend
-            run: terraform apply --auto-approve
+  #         - name: "Terraform init"
+  #           working-directory: Backend
+  #           run: terraform init
+          
+  #         - name: "Apply plan"
+  #           working-directory: Backend
+  #           run: terraform plan
+
+  #         - name: "Apply apply"
+  #           working-directory: Backend
+  #           run: terraform apply --auto-approve
