@@ -36,7 +36,7 @@ jobs:
             uses: aws-actions/configure-aws-credentials@v4.1.0
             with:
               aws-region: ${{ secrets.AWS_REGION }}
-              role-to-assume: ${{ secrets.MAIN_OIDC_ROLE }}
+              role-to-assume: ${{ secrets.OIDC }}
               role-session-name: role2
           
           - name: "Get URL from Terraform"
