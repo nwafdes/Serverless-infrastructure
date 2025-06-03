@@ -135,7 +135,3 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps({"Error": "WE are Facing an error!!"})
         }
-# test gpg commit
-# test gpg2
-# test commit3
-# test commit 4
