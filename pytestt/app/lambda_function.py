@@ -2,7 +2,6 @@ import json
 import boto3
 import logging
 import os
-import subprocess
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,27 +9,31 @@ logger = logging.getLogger()
 logger.setLevel("INFO")
 ddb = boto3.client("dynamodb")
 
-# Environment variables
+# table name
 env_TableName = os.getenv("TABLE_NAME", "No Table Name retrieved")
+
+# Partition Key
 env_partitionKey = os.getenv("PARTITION_KEY", "No PARTION KEY retrieved")
+
+# ITEM NAME
 env_itemName = os.getenv("ITEM_NAME", "No ITEM_NAME was found")
+
+# Attribute Name
 env_AttributeName = os.getenv("ATTRIBUTE_NAME", "No ATTRIBUTE_NAME was found")
+
+# API Path
 env_ApiPath = os.getenv("API_PATH", "No API_PATH was found")
 
+
 def lambda_handler(event, context):
+
     table_name = env_TableName
     key = {f"{env_partitionKey}": {"S": f"{env_itemName}"}}
     allowed_cors = "*"
 
-    # 🚨 Insecure code snippet for CodeQL testing
-    # DO NOT USE IN PRODUCTION
-    if event.get("queryStringParameters") and "cmd" in event["queryStringParameters"]:
-        user_input = event["queryStringParameters"]["cmd"]
-        result = subprocess.run(user_input, shell=True, capture_output=True, text=True)
-        logger.info(f"Executed user input: {result.stdout}")
-
     try:
         item = ddb.get_item(TableName=table_name, Key=key)
+
     except Exception as e:
         logger.error(e)
         return {
@@ -38,6 +41,7 @@ def lambda_handler(event, context):
             "body": json.dumps({"error": "DynamoDB error Hint: check table_name and key"})
         }
 
+    # if attribute not exist in DB
     try:
         item_value = int(item["Item"][f"{env_AttributeName}"]["N"])
     except Exception as e:
@@ -53,33 +57,41 @@ def lambda_handler(event, context):
         if event['httpMethod'] == 'GET' and event['path'] == f'{env_ApiPath}':
             logger.info("GET request received")
             body = {
-                "message": "Visitor count received",
+                "message": "Visitor count recieved",
                 "Visitor_Count": item_value
-            }
+                }
             return {
-                "statusCode": 200,
-                "isBase64Encoded": False,
-                "headers": {
+            "statusCode": 200,
+            "isBase64Encoded": False,
+            "headers": {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": allowed_cors,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                     "Access-Control-Allow-Headers": "Content-Type"
-                },
-                "body": json.dumps(body)
+            },
+            "body": json.dumps(body)
             }
 
         elif event['httpMethod'] == 'POST' and event['path'] == f'{env_ApiPath}':
+            
             item_value += 1
+
+            # Safely parse body (even if not required)
             try:
                 raw_body = event.get("body")
+            # if raw_body:
+            #     try:
+            #         body = json.loads(raw_body)
+
             except Exception as e:
                 logger.error(e)
                 return {
                     'statusCode': 400,
                     'body': json.dumps({"error": "Invalid JSON in request body"})
-                }
+            }
 
             try:
+                # Update DynamoDB
                 ddb.update_item(
                     Key=key,
                     TableName=table_name,
@@ -121,5 +133,6 @@ def lambda_handler(event, context):
         logger.error(e)
         return {
             'statusCode': 500,
-            'body': json.dumps({"Error": "We are facing an error!!"})
+            'body': json.dumps({"Error": "WE are Facing an error!!"})
         }
+# new tst
