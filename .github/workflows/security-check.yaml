@@ -42,12 +42,11 @@ jobs:
       - name: Install Bandit
         working-directory: pytestt
         run: pip install -r requirements.txt
-        
+
       - name: check if bandit already installed
         run: bandit --version
 
       - name: Run Bandit Scan
-        working-directory: pytestt/app/
         run: bandit -r . -f json -o bandit-report.json
 
       - name: Upload Bandit Report
