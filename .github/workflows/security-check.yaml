@@ -8,6 +8,11 @@ on:
 # schedule
   workflow_dispatch:
 
+permissions:
+  actions: read
+  contents: read
+  security-events: write  # 🧨 Required for CodeQL to report results
+
 jobs:
   codeql:
     name: CodeQL Analysis
