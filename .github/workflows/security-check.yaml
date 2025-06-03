@@ -40,7 +40,8 @@ jobs:
           python-version: '3.x'
 
       - name: Install Bandit
-        run: pip install bandit
+        working-directory: pytestt
+        run: pip install -r requirements.txt
 
       - name: Run Bandit Scan
         working-directory: pytestt/app/
