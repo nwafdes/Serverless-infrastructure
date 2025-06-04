@@ -43,11 +43,11 @@ jobs:
         working-directory: pytestt
         run: pip install -r requirements.txt
 
-      - name: check if bandit already installed
-        run: bandit --version
-
       - name: Run Bandit Scan
-        run: bandit -r . -f json -o bandit-report.json
+        working-directory: pytestt/app/
+        run: |
+          pwd
+          bandit lambda_function.py -f json -o bandit_report.json
 
       - name: Upload Bandit Report
         uses: actions/upload-artifact@v4
