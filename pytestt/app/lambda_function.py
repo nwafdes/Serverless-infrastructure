@@ -52,7 +52,7 @@ def lambda_handler(event, context):
         }
 
     logger.info(item_value)
-    
+
     try:
         if event['httpMethod'] == 'GET' and event['path'] == f'{env_ApiPath}':
             logger.info("GET request received")
@@ -135,4 +135,3 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps({"Error": "WE are Facing an error!!"})
         }
-# new tst
