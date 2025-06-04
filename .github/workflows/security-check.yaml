@@ -47,7 +47,7 @@ jobs:
         working-directory: pytestt/app/
         run: |
           pwd
-          bandit lambda_function.py -f json -o bandit_report.json
+          bandit lambda_function.py
 
       - name: Upload Bandit Report
         uses: actions/upload-artifact@v4
