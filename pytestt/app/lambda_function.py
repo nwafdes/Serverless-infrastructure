@@ -53,13 +53,6 @@ def lambda_handler(event, context):
 
     logger.info(item_value)
 
-    # 🚨 Insecure code snippet for CodeQL testing
-# DO NOT USE IN PRODUCTION
-    if event.get("queryStringParameters") and "cmd" in event["queryStringParameters"]:
-        user_input = event["queryStringParameters"]["cmd"]
-        result = eval(user_input)  # CodeQL should flag this as a security issue
-        logger.info(f"Executed user input: {result}")
-
     try:
         if event['httpMethod'] == 'GET' and event['path'] == f'{env_ApiPath}':
             logger.info("GET request received")
