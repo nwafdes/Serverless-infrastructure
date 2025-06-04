@@ -14,20 +14,6 @@ permissions:
   security-events: write  # 🧨 Required for CodeQL to report results
 
 jobs:
-#   codeql:
-#     name: CodeQL Analysis
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-
-#       - name: Initialize CodeQL
-#         uses: github/codeql-action/init@v3
-#         with:
-#           languages: python
-
-#       - name: Perform CodeQL Analysis
-#         uses: github/codeql-action/analyze@v3
-
   bandit:
     name: Python Static Analysis (Bandit)
     runs-on: ubuntu-latest
@@ -45,25 +31,35 @@ jobs:
 
       - name: Run Bandit Scan
         working-directory: pytestt/app/
-        run: |
-          pwd
-          bandit lambda_function.py -f json -o bandit_report.json
+        run: bandit lambda_function.py
 
-      - name: Upload Bandit Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: bandit_report
-          path: pytestt/app/bandit_report.json
+  sbom-and-vuln-scan:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
 
-#   tfsec:
-#     name: Terraform Static Analysis (Tfsec)
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
+        - name: Install Syft and Grype
+          run: |
+            curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+            curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
 
-#       - name: Install tfsec
-#         run: |
-#           curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+        - name: Generate SBOM
+          run: |
+            syft pytestt/ -o syft-json > sbom.json
 
-#       - name: Run tfsec
-#         run: tfsec Infastructure/
+        - name: Upload SBOM as artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: sbom
+            path: sbom.json
+
+        - name: Download SBOM for scanning
+          uses: actions/download-artifact@v4
+          with:
+            name: sbom
+            path: ./downloaded-sbom
+
+        - name: Scan SBOM with Grype
+          run: |
+            grype sbom:./downloaded-sbom/sbom.json
