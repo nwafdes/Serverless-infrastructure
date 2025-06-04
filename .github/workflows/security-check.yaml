@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bandit-report
-          path: bandit-report.json
+          path: pytestt/app/    bandit-report.json
 
 #   tfsec:
 #     name: Terraform Static Analysis (Tfsec)
