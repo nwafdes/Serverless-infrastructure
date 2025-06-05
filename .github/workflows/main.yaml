@@ -37,9 +37,9 @@ jobs:
             working-directory: pytestt
             run: pip install -r requirements.txt
 
-          # - name: "run pytest"
-          #   working-directory: pytestt/tests
-          #   run: pytest test_integration.py
+          - name: "run pytest"
+            working-directory: pytestt/tests
+            run: pytest test_integration.py
 
           
 
