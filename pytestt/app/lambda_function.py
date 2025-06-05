@@ -27,7 +27,7 @@ def lambda_handler(event, context):
 
     table_name = env_TableName
     key = {f"{env_partitionKey}": {"S": f"{env_itemName}"}}
-    allowed_cors = "*"
+    allowed_cors = "www.sahabanet.com,sahabanet.com"
 
     try:
         item = ddb.get_item(TableName=table_name, Key=key)
