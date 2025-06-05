@@ -27,7 +27,14 @@ def lambda_handler(event, context):
 
     table_name = env_TableName
     key = {f"{env_partitionKey}": {"S": f"{env_itemName}"}}
-    allowed_cors = "www.sahabanet.com,sahabanet.com"
+    allowed_cors =  ["https://www.sahabanet.com", "https://sahabanet.com"]
+
+    origin = event['headers'].get('Origin')  # from the incoming request
+    
+    if origin in allowed_cors:
+        cors_header = origin
+    else:
+        cors_header = 'null'  # or omit the header
 
     try:
         item = ddb.get_item(TableName=table_name, Key=key)
