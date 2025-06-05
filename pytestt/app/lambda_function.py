@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     allowed_cors =  ["https://www.sahabanet.com", "https://sahabanet.com"]
 
     origin = event['headers'].get('Origin')  # from the incoming request
-    
+
     if origin in allowed_cors:
         cors_header = origin
     else:
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
             "body": json.dumps({"error": "DynamoDB error Hint: check table_name and key"})
         }
 
-    # if attribute not exist in DB
+    # if attribute not exist in DBB
     try:
         item_value = int(item["Item"][f"{env_AttributeName}"]["N"])
     except Exception as e:
