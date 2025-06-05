@@ -29,8 +29,10 @@ def lambda_handler(event, context):
     key = {f"{env_partitionKey}": {"S": f"{env_itemName}"}}
     allowed_cors =  ["https://www.sahabanet.com", "https://sahabanet.com"]
 
-    origin = event['headers'].get('Origin')  # from the incoming request
+    origin = event['headers'].get('origin')  # from the incoming request
 
+    logger.info(origin)
+    
     if origin in allowed_cors:
         cors_header = origin
     else:
@@ -70,7 +72,7 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
             "headers": {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": allowed_cors,
+                    "Access-Control-Allow-Origin": cors_header,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                     "Access-Control-Allow-Headers": "Content-Type"
             },
