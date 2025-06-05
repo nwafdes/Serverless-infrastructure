@@ -2,9 +2,7 @@ import json
 import boto3
 import logging
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
 logger = logging.getLogger()
 logger.setLevel("INFO")
 ddb = boto3.client("dynamodb")
