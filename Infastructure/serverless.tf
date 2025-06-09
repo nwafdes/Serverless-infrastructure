@@ -24,6 +24,7 @@ resource "aws_api_gateway_method" "get" {
   resource_id = aws_api_gateway_resource.root.id
   http_method = "GET"
   authorization = "NONE"
+  api_key_required = true
 
   depends_on = [ aws_api_gateway_resource.root]
 }
@@ -36,6 +37,8 @@ resource "aws_api_gateway_method" "post" {
   http_method = "POST"
   authorization = "NONE"
   depends_on = [ aws_api_gateway_resource.root]
+  api_key_required = true
+
 
 }
 
@@ -134,6 +137,34 @@ resource "aws_api_gateway_deployment" "my_api_deployement" {
   ]
 }
 
+resource "aws_api_gateway_usage_plan" "plan"{
+  depends_on = [
+    aws_api_gateway_deployment.my_api_deployement,
+    aws_api_gateway_stage.my_api_stage
+  ]
+  name = "my_usage_plan"
+  api_stages {
+    stage = aws_api_gateway_stage.my_api_stage.stage_name
+    api_id = aws_api_gateway_rest_api.my_api.id  
+  }
+
+  throttle_settings {
+    burst_limit = 2
+    rate_limit  = 1
+  }
+}
+
+resource "aws_api_gateway_api_key" "api_key" {
+  name = "Terraform-test-key"
+}
+
+resource "aws_api_gateway_usage_plan_key" "usage_plan_key" {
+  depends_on = [aws_api_gateway_api_key.api_key]
+  key_id        = aws_api_gateway_api_key.api_key.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.plan.id
+}
+
 # Create a stage (Dev)
 resource "aws_api_gateway_stage" "my_api_stage" {
   deployment_id = aws_api_gateway_deployment.my_api_deployement.id
@@ -145,6 +176,11 @@ output "API_Invoke_URL" {
   value       = aws_api_gateway_stage.my_api_stage.invoke_url
   description = "description"
   depends_on  = [aws_api_gateway_stage.my_api_stage]
+}
+output "api_key" {
+  value = aws_api_gateway_usage_plan_key.usage_plan_key.value
+  description = "key of the api"
+  depends_on = [aws_api_gateway_usage_plan_key.usage_plan_key] ##
 }
 
 
