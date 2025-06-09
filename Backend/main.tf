@@ -5,7 +5,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket         = "sahaba-tf-state" # REPLACE WITH YOUR BUCKET NAME
+    bucket         = "sahaba-tf-state" 
     key            = "state-files/serverless-infra/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "sahaba-table"
