@@ -1,8 +1,7 @@
 name: Print GitHub JWT sub
 
 on:
-  push:
-    branches: "tst3"
+    workflow_dispatch: 
 jobs:
   show-jwt-sub:
     runs-on: ubuntu-latest
