@@ -19,14 +19,14 @@ resource "aws_dynamodb_table" "Sahaba-Table" {
   }
 }
 
-# resource "aws_dynamodb_table_item" "Sahaba-Table-Item" {
-#   table_name = aws_dynamodb_table.Sahaba-Table.name
-#   hash_key   = aws_dynamodb_table.Sahaba-Table.hash_key
+resource "aws_dynamodb_table_item" "Sahaba-Table-Item" {
+  table_name = aws_dynamodb_table.Sahaba-Table.name
+  hash_key   = aws_dynamodb_table.Sahaba-Table.hash_key
 
-#   item = <<ITEM
-# {
-#   "${var.hash_key}": {"S": "${var.item_name}"},
-#   "${var.attr_name}": {"N": "0"}
-# }
-# ITEM
-# }
+  item = <<ITEM
+{
+  "${var.hash_key}": {"S": "${var.item_name}"},
+  "${var.attr_name}": {"N": "0"}
+}
+ITEM
+}
