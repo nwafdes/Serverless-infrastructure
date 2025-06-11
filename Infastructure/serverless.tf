@@ -1,3 +1,15 @@
+locals {
+  redeployment_hash = sha1(join(",", [
+    aws_api_gateway_method.get.http_method,
+    aws_api_gateway_method.post.http_method,
+    aws_api_gateway_method.options.http_method,
+    aws_api_gateway_integration.lambda_integration_get.uri,
+    aws_api_gateway_integration.lambda_integration_post.uri,
+    aws_api_gateway_method.get.api_key_required ? "true" : "false",
+    aws_api_gateway_method.post.api_key_required ? "true" : "false"
+  ]))
+}
+
 # Create the API
 resource "aws_api_gateway_rest_api" "my_api" {
   name = var.api_name
@@ -128,14 +140,7 @@ resource "aws_api_gateway_deployment" "my_api_deployement" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
 
   triggers = {
-    redeployment = sha1(join(",", [
-      jsonencode(aws_api_gateway_method.get),
-      jsonencode(aws_api_gateway_method.post),
-      jsonencode(aws_api_gateway_method.options),
-      jsonencode(aws_api_gateway_integration.lambda_integration_get),
-      jsonencode(aws_api_gateway_integration.lambda_integration_post),
-      jsonencode(aws_api_gateway_integration.lambda_integration_options),
-    ]))
+    redeployment = local.redeployment_hash
   }
 
   depends_on = [
