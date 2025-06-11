@@ -24,10 +24,10 @@ terraform {
 
 module "Cloud_Resume" {
   source = "../Infastructure/"
-  table_name = "My_Web_Visitors"
-  hash_key =  "id"
-  item_name = "Website_Visitors"
-  attr_name = "visitors"
+  # table_name = "My_Web_Visitors"
+  # hash_key =  "id"
+  # item_name = "Website_Visitors"
+  # attr_name = "visitors"
   Lambda_function_Name = "differnt_function"
   policy_name = "allow_edit_DDB_Table"
   role_name = "allow_lambda_assume"
