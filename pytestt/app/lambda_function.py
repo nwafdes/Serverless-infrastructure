@@ -11,7 +11,7 @@ ddb = boto3.client("dynamodb")
 env_TableName = os.getenv("TABLE_NAME", "No Table Name retrieved")
 
 # Partition Key
-env_partitionKey = os.getenv("PARTITION_KEY", "No PARTION KEY retrieved")
+env_partitionKey = os.getenv("PARTITION_KEY", "No PARTITION KEY retrieved")
 
 # ITEM NAME
 env_itemName = os.getenv("ITEM_NAME", "No ITEM_NAME was found")
@@ -27,12 +27,12 @@ def lambda_handler(event, context):
 
     table_name = env_TableName
     key = {f"{env_partitionKey}": {"S": f"{env_itemName}"}}
-    allowed_cors =  ["https://www.sahabanet.com", "https://sahabanet.com"]
+    allowed_cors = ["https://www.sahabanet.com", "https://sahabanet.com"]
 
     origin = event['headers'].get('origin')  # from the incoming request
 
     logger.info(origin)
-    
+
     if origin in allowed_cors:
         cors_header = origin
     else:
@@ -48,7 +48,7 @@ def lambda_handler(event, context):
             "body": json.dumps({"error": "DynamoDB error Hint: check table_name and key"})
         }
 
-    # if attribute not exist in DBB
+    # if attribute not exist in DDB
     try:
         item_value = int(item["Item"][f"{env_AttributeName}"]["N"])
     except Exception as e:
@@ -64,38 +64,33 @@ def lambda_handler(event, context):
         if event['httpMethod'] == 'GET' and event['path'] == f'{env_ApiPath}':
             logger.info("GET request received")
             body = {
-                "message": "Visitor count recieved",
+                "message": "Visitor count received",
                 "Visitor_Count": item_value
-                }
+            }
             return {
-            "statusCode": 200,
-            "isBase64Encoded": False,
-            "headers": {
+                "statusCode": 200,
+                "isBase64Encoded": False,
+                "headers": {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": cors_header,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                    "Access-Control-Allow-Headers": "Content-Type,x-api-key"
-            },
-            "body": json.dumps(body)
+                    "Access-Control-Allow-Headers": "Content-Type, X-Api-Key"
+                },
+                "body": json.dumps(body)
             }
 
         elif event['httpMethod'] == 'POST' and event['path'] == f'{env_ApiPath}':
-            
+
             item_value += 1
 
-            # Safely parse body (even if not required)
             try:
                 raw_body = event.get("body")
-            # if raw_body:
-            #     try:
-            #         body = json.loads(raw_body)
-
             except Exception as e:
                 logger.error(e)
                 return {
                     'statusCode': 400,
                     'body': json.dumps({"error": "Invalid JSON in request body"})
-            }
+                }
 
             try:
                 # Update DynamoDB
@@ -124,9 +119,9 @@ def lambda_handler(event, context):
                 "isBase64Encoded": False,
                 "headers": {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": allowed_cors,
+                    "Access-Control-Allow-Origin": cors_header,
                     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                    "Access-Control-Allow-Headers": "Content-Type"
+                    "Access-Control-Allow-Headers": "Content-Type, X-Api-Key"
                 },
                 "body": json.dumps(response_body)
             }
@@ -136,11 +131,10 @@ def lambda_handler(event, context):
                 'statusCode': 400,
                 'body': json.dumps({"Error": "Invalid Request"})
             }
+
     except Exception as e:
         logger.error(e)
         return {
             'statusCode': 500,
             'body': json.dumps({"Error": "WE are Facing an error!!"})
         }
-
-# test change
