@@ -1,11 +1,3 @@
-data "terraform_remote_state" "ddb_stack" {
-  backend = "s3" # or any other backend you're using
-  config = {
-    bucket = "sahaba-tf-state"
-    key    = "state-files/DDB-infra/terraform.tfstate" # path to the DDB-Module state
-    region = "us-east-1"
-  }
-}
 
 # Creat the Policy
 resource "aws_iam_policy" "Update_DDB_Table" {
