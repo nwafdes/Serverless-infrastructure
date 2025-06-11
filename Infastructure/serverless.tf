@@ -5,7 +5,6 @@ locals {
     aws_api_gateway_method.options.http_method,
     aws_api_gateway_integration.lambda_integration_get.uri,
     aws_api_gateway_integration.lambda_integration_post.uri,
-    aws_api_gateway_integration.lambda_integration_options.uri,
     aws_api_gateway_method.get.api_key_required ? "true" : "false",
     aws_api_gateway_method.post.api_key_required ? "true" : "false"
   ]))
