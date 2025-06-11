@@ -215,10 +215,10 @@ resource "aws_lambda_function" "test_lambda" {
 
   environment {
     variables = {
-      TABLE_NAME = aws_dynamodb_table.Sahaba-Table.name
-      PARTITION_KEY = aws_dynamodb_table.Sahaba-Table.hash_key
-      ITEM_NAME = var.item_name
-      ATTRIBUTE_NAME = var.attr_name
+      TABLE_NAME = "My_Web_Visitors"
+      PARTITION_KEY = "id"
+      ITEM_NAME = "Website_Visitors"
+      ATTRIBUTE_NAME = "visitors"
       API_PATH = aws_api_gateway_resource.root.path
     }
   }

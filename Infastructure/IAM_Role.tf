@@ -1,3 +1,12 @@
+data "terraform_remote_state" "ddb_stack" {
+  backend = "s3" # or any other backend you're using
+  config = {
+    bucket = "sahaba-tf-state"
+    key    = "state-files/DDB-infra/terraform.tfstate" # path to the DDB-Module state
+    region = "us-east-1"
+  }
+}
+
 # Creat the Policy
 resource "aws_iam_policy" "Update_DDB_Table" {
     name = var.policy_name
@@ -11,9 +20,9 @@ resource "aws_iam_policy" "Update_DDB_Table" {
             ]
             Effect = "Allow"
             Resource = [
-                "${aws_dynamodb_table.Sahaba-Table.arn}",
-                "${aws_dynamodb_table.Sahaba-Table.arn}/*"
-            ]
+                "arn:aws:dynamodb:us-east-1:518029234085:table/My_Web_Visitors",
+                "arn:aws:dynamodb:us-east-1:518029234085:table/My_Web_Visitors/* "
+                ]
         }]
     })
 }

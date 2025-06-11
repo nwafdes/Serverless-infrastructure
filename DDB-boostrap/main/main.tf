@@ -6,7 +6,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket         = "sahaba-tf-state" # REPLACE WITH YOUR BUCKET NAME
-    key            = "state-files/serverless-infra/terraform.tfstate"
+    key            = "state-files/DDB-infra/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "sahaba-table"
     encrypt        = true
@@ -22,12 +22,11 @@ terraform {
 }
 
 
-module "Cloud_Resume" {
-  source = "../Infastructure/"
-  Lambda_function_Name = "differnt_function"
-  policy_name = "allow_edit_DDB_Table"
-  role_name = "allow_lambda_assume"
-  api_name = "FirstTerraformAPI"
-  myregion = "us-east-1"
-  resource_name = "visitors"
+module "DDB" {
+  source = "../DDB/"
+  table_name = "My_Web_Visitors"
+  hash_key =  "id"
+  item_name = "Website_Visitors"
+  attr_name = "visitors"
 }
+
