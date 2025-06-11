@@ -127,6 +127,17 @@ resource "aws_api_gateway_integration_response" "cors_integration_response" {
 resource "aws_api_gateway_deployment" "my_api_deployement" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
 
+  triggers = {
+    redeployment = sha1(join(",", [
+      jsonencode(aws_api_gateway_method.get),
+      jsonencode(aws_api_gateway_method.post),
+      jsonencode(aws_api_gateway_method.options),
+      jsonencode(aws_api_gateway_integration.lambda_integration_get),
+      jsonencode(aws_api_gateway_integration.lambda_integration_post),
+      jsonencode(aws_api_gateway_integration.lambda_integration_options),
+    ]))
+  }
+
   depends_on = [
     aws_api_gateway_method.get,
     aws_api_gateway_integration.lambda_integration_get,
