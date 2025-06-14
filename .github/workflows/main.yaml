@@ -6,6 +6,10 @@ on:
     branches: main
     paths-ignore:
       - 'README.md'
+    paths: 
+      - "Backend/*"
+      - "Infrastructure/*"
+      - "pytestt/*"
 
 permissions: 
   id-token: write
