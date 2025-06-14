@@ -3,8 +3,6 @@ name: Security Scans
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'README.md'
     paths: 
       - "Backend/*"
       - "Infrastructure/*"
