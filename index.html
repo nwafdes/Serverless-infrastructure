@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nawaf Alshehri – Cloud Security & DevOps Engineer (AWS Edition)</title>
+
+  <!-- Icons / Fonts -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon/favicon-32x32.png" type="image/png">
+
+  <style>
+  /* ───────────────── Base layout & colours ───────────────────── */
+  body{
+      background:#1E1B15;
+      font-family:'Roboto',Arial,Helvetica,sans-serif;
+      color:#111; margin:0; padding:0;
+  }
+  .container{ margin:80px auto 20px; width:80%; display:flex; justify-content:center; }
+  .rectangle{
+      background:#E6D5B8; border-radius:25px;
+      padding:40px 50px; width:100%;
+      box-shadow:0 10px 20px rgba(0,0,0,.25);
+  }
+  .line{ border-bottom:2px solid #000; padding-bottom:5px; margin-top:30px; }
+
+  /* ───────────────── Header with icons & ribbon ───────────────── */
+  .header{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .header .left h1, .header .left h3{ margin:0; }
+
+  .right{ display:flex; align-items:center; gap:18px; }
+  .header-icon{ color:#000; text-decoration:none; transition:color .2s; }
+  .header-icon:hover{ color:#FF9900; }            /* AWS accent */
+
+  .visitor-chip{
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:.9rem; font-weight:600; padding:4px 10px; border-radius:999px;
+      background:#202124; color:#FF9900;
+      box-shadow:0 0 8px rgba(255,153,0,.4);
+  }
+
+  .hosting-ribbon{
+      padding:4px 10px; border-radius:6px;
+      font-size:.7rem; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+      display:inline-flex; align-items:center; gap:6px;
+      background:#232F3E;      /* AWS dark nav colour */
+      color:#FF9900;
+      box-shadow:0 0 8px rgba(0,0,0,.4);
+      position:relative; overflow:hidden; cursor:default;
+  }
+  .hosting-ribbon::after{
+      content:""; position:absolute; top:0; left:-100%;
+      width:60%; height:100%;
+      background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.18) 60%,transparent 100%);
+      animation:ribbonShine 3s 1s ease-out forwards;
+  }
+  @keyframes ribbonShine{ to{ left:150%; } }
+
+  /* ───────────────── Termination banner ───────────────────────── */
+  .notice{
+      margin:16px 0 24px; padding:10px 16px; border-radius:8px;
+      background:#FF9900; color:#202124;
+      display:flex; align-items:center; gap:10px; font-size:.85rem; line-height:1.4;
+      box-shadow:0 4px 12px rgba(0,0,0,.25); cursor:pointer;
+      animation:fadeIn .8s ease-out both;
+  }
+  @keyframes fadeIn{ from{opacity:0;transform:translateY(-8px);} to{opacity:1;transform:translateY(0);} }
+  .notice i{ font-size:1.2rem; }
+  .notice:hover{ box-shadow:0 0 14px rgba(255,153,0,.8); }
+
+  /* ───────────────── Social footer ────────────────────────────── */
+  .social-icons{ text-align:center; margin:40px 0 80px; }
+  .social-icons a{
+      margin:0 15px; font-size:32px; width:60px; height:60px;
+      display:inline-flex; justify-content:center; align-items:center;
+      border-radius:50%; background:#E6D5B8; color:#1E1B15;
+      box-shadow:0 0 12px rgba(230,213,184,.6); transition:all .3s ease-in-out;
+  }
+  .social-icons a:hover{
+      box-shadow:0 0 20px rgba(230,213,184,.95),0 0 30px rgba(230,213,184,.5);
+      transform:scale(1.1); color:#000;
+  }
+
+  /* ───────────────── Table & lists ────────────────────────────── */
+  ul{ padding-left:20px; }
+  .project a{ color:#007bff; text-decoration:none; }
+  .project a:hover{ text-decoration:underline; }
+
+  /* Hide legacy counter block */
+  .rec{ display:none; }
+  </style>
+</head>
+
+<body>
+
+  <section class="container">
+    <div class="rectangle">
+      <!-- Header -->
+      <div class="header">
+        <!-- Termination banner -->
+        <div class="notice" id="aws-notice" title="Click to dismiss">
+          <i class="fa fa-circle-exclamation" aria-hidden="true"></i>
+          <span>
+            Live AWS backend retired to avoid ongoing costs.<br>
+            You’re viewing an archived static snapshot of the original site.
+          </span>
+        </div>
+
+        <div class="left">
+          <h1>Nawaf Alshehri</h1>
+          <h3>Cloud Security &amp; DevOps Engineer (AWS Edition)</h3>
+        </div>
+
+        <div class="right">
+          <a href="https://www.linkedin.com/in/alshehri-nawaf/" target="_blank" class="header-icon">
+            <i class="fab fa-linkedin fa-2x"></i>
+          </a>
+          <a href="https://github.com/nwafdes" target="_blank" class="header-icon">
+            <i class="fab fa-github fa-2x"></i>
+          </a>
+          <span class="visitor-chip" aria-label="visitor counter paused">
+            <i class="fa fa-eye" aria-hidden="true"></i> 0
+          </span>
+        </div>
+
+        <div class="hosting-ribbon" title="Static archive served from GitHub Pages">
+          <i class="fa fa-code-branch" aria-hidden="true"></i>
+          Static&nbsp;Mode
+        </div>
+      </div>
+      <!-- /header -->
+
+      <!-- Archive screenshot -->
+      <h3 class="line">A Glimpse of the Original AWS Build</h3>
+      <p>Below is a preserved screenshot of the fully serverless version that once ran on S3&nbsp;+&nbsp;CloudFront, Lambda, DynamoDB &amp; API Gateway.</p>
+      <img src="assets/aws-screenshot.png" alt="Archived AWS site screenshot" style="width:100%;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.3);margin:18px 0;">
+
+      <!-- Technical profile -->
+      <h3 class="line">Technical Profile</h3>
+      <p>A results-oriented engineer with certified expertise in AWS architecture. Proved the design of secure, fully automated serverless stacks and CI/CD pipelines.</p>
+
+      <!-- (Original project sections, shortened for brevity) -->
+      <h3 class="line">Key AWS Project</h3>
+      <div class="project">
+        <h4>Cloud Resume Challenge&nbsp;— AWS Edition</h4>
+        <ul>
+          <li><strong>IaC:</strong> Terraform deployed S3, CloudFront, Lambda, DynamoDB &amp; API Gateway.</li>
+          <li><strong>CI/CD:</strong> GitHub Actions with OIDC → AWS; automated tests &amp; SBOM.</li>
+          <li><strong>Observability:</strong> CloudWatch logs &amp; metrics; visitor counter Lambda.</li>
+        </ul>
+      </div>
+
+      <h3 class="line">Core Skills</h3>
+      <ul>
+        <li><strong>Cloud:</strong> AWS (S3, Lambda, DynamoDB, CloudFront, Route 53)</li>
+        <li><strong>IaC:</strong> Terraform</li>
+        <li><strong>CI/CD:</strong> GitHub Actions</li>
+        <li><strong>Languages:</strong> Python, PowerShell, Bash</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer social -->
+  <div class="social-icons">
+    <a href="https://x.com/Nwaf_IT" target="_blank" class="fa-brands fa-twitter"></a>
+    <a href="https://www.youtube.com/@NAWAF-SUDO" target="_blank" class="fa-brands fa-youtube"></a>
+  </div>
+
+  <!-- Minimal JS: dismiss banner -->
+  <script>
+  document.getElementById('aws-notice')?.addEventListener('click',e=>{
+    e.currentTarget.style.display='none';
+  });
+  </script>
+</body>
+</html>
